@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mt-5">
+            <h1 class="display-4">Secure Sentiment Analysis System</h1>
+            <p class="lead">Analyze social media sentiment with advanced encryption technology</p>
+            <div class="mt-5">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow">
+                            <div class="card-body text-center">
+                                <i class="fas fa-lock fa-4x text-primary mb-3"></i>
+                                <h3>Homomorphic Encryption</h3>
+                                <p>Process encrypted data without exposing sensitive information</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow">
+                            <div class="card-body text-center">
+                                <i class="fas fa-brain fa-4x text-primary mb-3"></i>
+                                <h3>Smart Analysis</h3>
+                                <p>Utilizing Naive Bayes algorithm for accurate sentiment classification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                {% if not session.get('user_id') %}
+                <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg mx-2">Sign Up</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg mx-2">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
