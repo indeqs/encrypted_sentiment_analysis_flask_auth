@@ -1,27 +1,26 @@
-// static/js/main.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Auto-close alerts after 5 seconds
-    setTimeout(function() {
+    setTimeout(function () {
         const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
+        alerts.forEach(function (alert) {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         });
     }, 5000);
-    
+
     // Toggle password visibility
     const togglePassword = document.querySelector('#togglePassword');
     if (togglePassword) {
         const password = document.querySelector('#password');
-        
-        togglePassword.addEventListener('click', function() {
+
+        togglePassword.addEventListener('click', function () {
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
     }
-    
+
     // Example chart initialization (would be replaced with real data)
     const chartElement = document.getElementById('sentimentChart');
     if (chartElement) {
