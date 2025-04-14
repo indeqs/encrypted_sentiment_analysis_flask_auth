@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Email - Sentiment Analysis System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Verify Your Email</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> A verification code has been sent to <strong>{{ email }}</strong>
+                </div>
+
+                <form action="{{ url_for('verify') }}" method="post">
+                    <div class="mb-3">
+                        <label for="verification_code" class="form-label">Verification Code</label>
+                        <input type="text" class="form-control form-control-lg text-center" id="verification_code"
+                            name="verification_code" placeholder="Enter 6-digit code" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Verify Email</button>
+                </form>
+
+                <div class="text-center">
+                    <p>Didn't receive the code?</p>
+                    <form action="{{ url_for('resend_code') }}" method="post">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-redo"></i> Resend Code
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Focus on the verification code input
+        document.getElementById('verification_code').focus();
+
+        // Auto-submit when 6 digits are entered
+        document.getElementById('verification_code').addEventListener('input', function (e) {
+            if (this.value.length === 6) {
+                // Slight delay to give user visual feedback before submitting
+                setTimeout(() => {
+                    this.form.submit();
+                }, 300);
+            }
+        });
+    });
+</script>
+{% endblock %}

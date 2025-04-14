@@ -1,25 +1,47 @@
-/* static/css/style.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.container {
+    flex: 1;
 }
 
 .card {
-    border-radius: 10px;
+    border-radius: 15px;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    border: none;
 }
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 .card-header {
     border-bottom: none;
+    padding: 1.5rem;
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
@@ -30,30 +52,56 @@ body {
 .btn-primary:hover {
     background-color: #3a56d4;
     border-color: #3a56d4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+}
+
+.btn-outline-primary {
+    color: #4361ee;
+    border-color: #4361ee;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4361ee;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
 }
 
 .alert {
     border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .display-4 {
     font-weight: 700;
+    color: #212529;
 }
 
 .lead {
     font-size: 1.25rem;
     font-weight: 400;
+    color: #6c757d;
 }
 
-/* Custom styles for dashboard cards */
-.dashboard-card {
-    min-height: 200px;
+/* Custom styles for input groups */
+.input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
 }
 
-/* Custom styles for form elements */
-.form-control, .form-select {
-    border-radius: 8px;
-    padding: 12px;
+.input-group .form-control {
+    border-left: none;
+}
+
+.input-group .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.input-group .form-control:focus + .input-group-text {
+    border-color: #ced4da;
 }
 
 /* Footer styling */
@@ -69,9 +117,68 @@ footer {
     width: 100%;
 }
 
+/* Custom animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Custom styles for dashboard cards */
+.dashboard-card {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.dashboard-card i {
+    margin-bottom: 1rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .display-4 {
         font-size: 2.5rem;
     }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .feature-icon {
+        width: 80px !important;
+        height: 80px !important;
+    }
+}
+
+/* Progress bar styling */
+.progress {
+    height: 6px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+/* Form validation styling */
+.form-control.is-valid:focus, 
+.form-control.is-invalid:focus {
+    box-shadow: none;
+}
+
+/* Add a splash of color with gradient backgrounds */
+.bg-gradient {
+    background: linear-gradient(135deg, #4361ee 0%, #3a56d4 100%);
 }

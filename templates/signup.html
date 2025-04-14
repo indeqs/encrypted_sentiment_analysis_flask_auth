@@ -3,27 +3,35 @@
 {% block title %}Sign Up - Sentiment Analysis System{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Create Account</h3>
+<div class="row justify-content-center my-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Create Account</h3>
+                <p class="mb-0 mt-2">Join our secure sentiment analysis platform</p>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <form action="{{ url_for('signup') }}" method="post" id="signupForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
                         <div class="form-text" id="usernameHelp">Username must be at least 3 characters and contain only
                             letters, numbers, and underscores.</div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" class="form-control" id="password" name="password" required>
                             <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                 <i class="fa fa-eye-slash" aria-hidden="true"></i>
@@ -36,11 +44,33 @@
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100" id="signupButton" disabled>Sign Up</button>
+                    <div class="mb-4">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback" id="confirmPasswordFeedback">
+                            Passwords don't match!
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg" id="signupButton" disabled>
+                            <i class="fas fa-user-plus me-2"></i> Create Account
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                Already have an account? <a href="{{ url_for('login') }}">Login</a>
+            <div class="card-footer bg-light py-3 text-center">
+                <div class="small">
+                    Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                </div>
             </div>
         </div>
     </div>

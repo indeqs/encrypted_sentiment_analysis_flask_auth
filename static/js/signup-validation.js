@@ -1,21 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
     const emailInput = document.getElementById('email');
     const signupButton = document.getElementById('signupButton');
     const passwordStrength = document.getElementById('passwordStrength');
     const signupForm = document.getElementById('signupForm');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
 
     // Form validation states
     let validations = {
         username: false,
         email: false,
-        password: false
+        password: false,
+        confirmPassword: false
     };
 
     // Update signup button state
     function updateSignupButton() {
-        signupButton.disabled = !(validations.username && validations.email && validations.password);
+        signupButton.disabled = !(validations.username && validations.email && validations.password && validations.confirmPassword);
     }
 
     // Username validation
@@ -107,13 +110,49 @@ document.addEventListener('DOMContentLoaded', function () {
             passwordInput.classList.add('is-invalid');
             validations.password = false;
         }
+
+        // Check if confirm password matches
+        if (confirmPasswordInput.value) {
+            validateConfirmPassword();
+        }
+
         updateSignupButton();
     });
+
+    // Confirm password validation
+    function validateConfirmPassword() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (password === confirmPassword && password !== '') {
+            confirmPasswordInput.classList.remove('is-invalid');
+            confirmPasswordInput.classList.add('is-valid');
+            validations.confirmPassword = true;
+        } else {
+            confirmPasswordInput.classList.remove('is-valid');
+            confirmPasswordInput.classList.add('is-invalid');
+            document.getElementById('confirmPasswordFeedback').style.display = 'block';
+            validations.confirmPassword = false;
+        }
+        updateSignupButton();
+    }
+
+    confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+    // Toggle password visibility for confirm password
+    if (toggleConfirmPassword) {
+        toggleConfirmPassword.addEventListener('click', function () {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
 
     // Form submission validation
     signupForm.addEventListener('submit', function (event) {
         // Double check all validations before submitting
-        if (!(validations.username && validations.email && validations.password)) {
+        if (!(validations.username && validations.email && validations.password && validations.confirmPassword)) {
             event.preventDefault();
             alert('Please fix all form errors before submitting.');
         }
