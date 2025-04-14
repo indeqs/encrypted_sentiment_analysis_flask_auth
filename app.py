@@ -222,6 +222,19 @@ def login():
             flash("Your account has been banned", "danger")
             return redirect(url_for("login"))
 
+        # Skip verification for admin user
+        if user.username == "admin":
+            # Mark admin as verified if they aren't already
+            if not user.is_verified:
+                user.is_verified = True
+                db.session.commit()
+                
+            # Log admin in
+            session["user_id"] = user.id
+            session["needs_verification"] = False
+            flash(f"Welcome back, {user.username}!", "success")
+            return redirect(url_for("admin_dashboard"))
+
         # Check if user is verified
         if not user.is_verified:
             # Generate and send new verification code
@@ -245,12 +258,8 @@ def login():
 
         flash(f"Welcome back, {user.username}!", "success")
 
-        # Redirect based on user type
-        if user.is_admin:
-            return redirect(url_for("admin_dashboard"))
-        else:
-            # Redirect normal users to external URL
-            return redirect("http://localhost:7860/")
+        # Redirect normal users to external URL
+        return redirect("http://localhost:7860/")
 
     return render_template("login.html")
 
