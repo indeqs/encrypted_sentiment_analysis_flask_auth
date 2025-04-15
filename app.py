@@ -17,11 +17,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import os
 from datetime import datetime, timedelta
-from utils.email_sender import generate_verification_code, send_verification_code
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from utils.email_sender import generate_verification_code, send_verification_code, send_email
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET")
+app.config["SECURITY_PASSWORD_SALT"] = os.getenv("SECURITY_PASSWORD_SALT")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sentiment_app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -228,7 +230,7 @@ def login():
             if not user.is_verified:
                 user.is_verified = True
                 db.session.commit()
-                
+
             # Log admin in
             session["user_id"] = user.id
             session["needs_verification"] = False
@@ -323,6 +325,107 @@ def resend_code():
         flash("Failed to send verification code. Please try again.", "danger")
 
     return redirect(url_for("verify"))
+
+
+# Generate a secure token for password reset
+def generate_reset_token(email):
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+    return serializer.dumps(email, salt=app.config["SECURITY_PASSWORD_SALT"])
+
+
+# Confirm the reset token
+def confirm_reset_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+    try:
+        email = serializer.loads(
+            token, salt=app.config["SECURITY_PASSWORD_SALT"], max_age=expiration
+        )
+        return email
+    except (SignatureExpired, BadSignature):
+        return None
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form.get("email")
+
+        # Check if email exists
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash(
+                "If this email is registered, you will receive a password reset link.",
+                "info",
+            )
+            return redirect(url_for("login"))
+
+        # Generate token
+        token = generate_reset_token(user.email)
+        reset_url = url_for("reset_password", token=token, _external=True)
+
+        # Email subject and body
+        subject = "Password Reset Request"
+        body = f"""
+Hello {user.username},
+
+To reset your password, please visit the following link:
+{reset_url}
+
+This link will expire in 1 hour.
+
+If you did not request a password reset, please ignore this email.
+
+Regards,
+Sentiment Analysis System Team
+        """
+
+        # Send email
+        if send_email(user.email, subject, body):
+            flash(
+                "If this email is registered, you will receive a password reset link.",
+                "info",
+            )
+        else:
+            flash("Error sending reset email. Please try again later.", "danger")
+
+        return redirect(url_for("login"))
+
+    return render_template("forgot_password.html")
+
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    # Verify token
+    email = confirm_reset_token(token)
+    if not email:
+        flash("The password reset link is invalid or has expired.", "danger")
+        return redirect(url_for("forgot_password"))
+
+    if request.method == "POST":
+        password = request.form.get("password")
+        confirm_password = request.form.get("confirm_password")
+
+        # Validate passwords
+        if not password or not confirm_password:
+            flash("Both fields are required", "danger")
+            return redirect(url_for("reset_password", token=token))
+
+        if password != confirm_password:
+            flash("Passwords don't match", "danger")
+            return redirect(url_for("reset_password", token=token))
+
+        # Find user and update password
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = generate_password_hash(password)
+            db.session.commit()
+            flash("Your password has been updated! You can now log in.", "success")
+            return redirect(url_for("login"))
+        else:
+            flash("User not found", "danger")
+            return redirect(url_for("login"))
+
+    return render_template("reset_password.html", token=token)
 
 
 @app.route("/logout")
