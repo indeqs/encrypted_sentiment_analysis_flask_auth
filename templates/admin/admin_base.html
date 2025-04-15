@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <!-- templates/admin/admin_base.html - Updated styles section -->
     <style>
         /* Admin-specific styles */
         :root {
@@ -30,6 +31,14 @@
         .admin-navbar {
             background-color: var(--admin-primary);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: white;
         }
 
         .admin-sidebar {
@@ -81,6 +90,39 @@
             width: 20px;
             text-align: center;
             margin-right: 10px;
+        }
+
+        /* Override primary button colors */
+        .btn-primary {
+            background-color: var(--admin-primary);
+            border-color: var(--admin-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--admin-secondary);
+            border-color: var(--admin-secondary);
+        }
+
+        .bg-primary {
+            background-color: var(--admin-primary) !important;
+        }
+
+        /* Override other Bootstrap elements */
+        .dropdown-item:active {
+            background-color: var(--admin-primary);
+        }
+
+        .badge.bg-success {
+            background-color: #2e7d32 !important;
+        }
+
+        .badge.bg-danger {
+            background-color: #c62828 !important;
+        }
+
+        /* Table styles */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: var(--admin-light);
         }
 
         /* Make sure mobile view works well */
