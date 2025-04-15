@@ -11,13 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Toggle password visibility
-    const togglePassword = document.querySelector('#togglePassword');
     if (togglePassword) {
-        const password = document.querySelector('#password');
-
         togglePassword.addEventListener('click', function () {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
